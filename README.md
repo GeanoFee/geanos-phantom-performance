@@ -2,7 +2,7 @@
 **"Ghosts in the Machine" - A High-Performance Memory Manager for Foundry VTT**
 
 ## Overview
-Geano's Phantom Performance (GPP) drastically reduces the memory footprint of your Foundry VTT world by intelligently managing Actor data. It distinguishes between **"Hot Data"** (actively used actors) and **"Phantom Data"** (inactive actors), offloading the bulk of unused data to a hidden storage compendium while keeping a lightweight "Skeleton" in the world.
+Geano's Phantom Performance (GPP) drastically reduces the memory footprint of your FoundryVTT world by intelligently managing Actor data. It distinguishes between **"Hot Data"** (actively used actors) and **"Phantom Data"** (inactive actors), offloading the bulk of unused data to a hidden storage compendium while keeping a lightweight "Skeleton" in the world.
 
 ## Key Features
 
@@ -55,6 +55,7 @@ Data integrity is paramount. GPP employs a **Read-Back Verification** protocol.
 
 ## Technical Summary
 Geano's Phantom Performance operates by intercepting the Foundry VTT `Actor` class methods to inject its "Smart Proxy" layer. It utilizes a `flags` based system to track state (`isPhantom`, `backingId`) and relies on standard Foundry Document methods (`update`, `create`, `delete`) to ensure data integrity is maintained within the `world-phantom-storage` compendium.
+
 
 
 
