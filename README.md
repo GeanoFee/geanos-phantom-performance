@@ -42,7 +42,8 @@ if (gpp) {
 }
 // Safe access to actor.system follows!
 ```
-* **GPP.isPhantom(doc):** Quick status check for any document.
-* **GPP.prioritize(id):** Fire-and-forget background hydration (e.g., on hover or target selection).
-* **Hook gpp.documentHydrated:** React to documents as they become fully available.
+* **`GPP.isPhantom(doc)`:** Quick status check for any document.
+* **`GPP.prioritize(id)`:** Fire-and-forget background hydration (e.g., on hover or target selection).
+* **Hook `gpp.documentHydrated`:** React to documents as they become fully available.
+
 
