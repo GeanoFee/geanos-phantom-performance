@@ -15,6 +15,16 @@ export class Settings {
             restricted: true
         });
 
+        // 2. Notification Settings
+        game.settings.register(MODULE_ID, "verboseNotifications", {
+            name: "Verbose Notifications",
+            hint: "If enabled, shows UI notifications for every hydration event. Disable to keep the UI clean.",
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: false
+        });
+
         // 2. Exorcism Menu (Wrapper)
         class ExorcismWrapper extends FormApplication {
             render() {

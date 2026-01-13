@@ -144,7 +144,12 @@ export class PhantomStorage {
         fullData.flags[PhantomStorage.FLAG_SCOPE].isPhantom = true;
         fullData.flags[PhantomStorage.FLAG_SCOPE].backingId = backingId;
 
-        await actor.update(fullData, { recursive: false });
+        // GPP Compatibility Context:
+        // Some modules (like generic heartbeat listeners) might crash if they inspect the actor 
+        // while it's in this transitional state. We pass a flag in options so they can potentially ignore it,
+        // (though they likely won't unless patched).
+        // However, maybe passing 'diff: false' helps ensures strict replacement.
+        await actor.update(fullData, { recursive: false, diff: false, gppTransition: true });
 
         // Step 2: Release protection
         await actor.setFlag(PhantomStorage.FLAG_SCOPE, "isPhantom", false);

@@ -18,7 +18,9 @@ export class SceneProxy {
             // AND it is actually a phantom scene
             if (this.flags?.["geanos-phantom-performance"]?.isPhantom) {
                 console.log("GPP | Intercepting View for Phantom Scene:", this.name);
-                ui.notifications.info(`GPP: Hydrating Scene "${this.name}"... please wait.`);
+                if (game.settings.get("geanos-phantom-performance", "verboseNotifications")) {
+                    ui.notifications.info(`GPP: Hydrating Scene "${this.name}"... please wait.`);
+                }
 
                 try {
                     // 1. Hydrate DB

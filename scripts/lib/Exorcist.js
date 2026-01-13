@@ -34,7 +34,9 @@ export class Exorcist {
             const actor = actors[i];
             try {
                 // Show progress every 5 actors
-                if (i % 5 === 0) ui.notifications.info(`GPP: Restoring Actor ${i + 1}/${actors.length}...`);
+                if (i % 5 === 0 && game.settings.get("geanos-phantom-performance", "verboseNotifications")) {
+                    ui.notifications.info(`GPP: Restoring Actor ${i + 1}/${actors.length}...`);
+                }
                 await GPP.swapIn(actor);
             } catch (err) {
                 console.error(`GPP | Failed to exorcise ${actor.name}:`, err);
@@ -48,7 +50,9 @@ export class Exorcist {
         for (let i = 0; i < scenes.length; i++) {
             const scene = scenes[i];
             try {
-                if (i % 1 === 0) ui.notifications.info(`GPP: Restoring Scene ${i + 1}/${scenes.length}...`);
+                if (i % 1 === 0 && game.settings.get("geanos-phantom-performance", "verboseNotifications")) {
+                    ui.notifications.info(`GPP: Restoring Scene ${i + 1}/${scenes.length}...`);
+                }
                 await GPP.swapInScene(scene);
             } catch (err) {
                 console.error(`GPP | Failed to exorcise Scene ${scene.name}:`, err);

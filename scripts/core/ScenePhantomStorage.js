@@ -137,20 +137,10 @@ export class ScenePhantomStorage {
             "Note": fullData.notes
         };
 
-        // Remove collections from update payload to avoid conflict
-        delete fullData.tokens;
-        delete fullData.lights;
-        delete fullData.walls;
-        delete fullData.sounds;
-        delete fullData.templates;
-        delete fullData.tiles;
-        delete fullData.drawings;
-        delete fullData.notes;
-
-        // 1. Update Metadata (Size, Image, Grid, Flags)
-        // We allow recursive merge (default) so Foundry diffs the data.
-        // This prevents triggering side-effects (like playing music) if fields like 'playlist' haven't changed.
-        await scene.update(fullData);
+        // 1. Skip Metadata Update
+        // Since swapOut ONLY stripped collections, the metadata (including playlist, lights, etc) 
+        // is already correct on the Phantom. Updating it again triggers side-effects (Audio, Heartbeat).
+        // await scene.update(fullData);
 
         // 2. Re-Create Embedded Documents
         // We use createEmbeddedDocuments with keepId: true to ensure exact restoration

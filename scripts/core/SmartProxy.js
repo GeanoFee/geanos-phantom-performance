@@ -123,8 +123,10 @@ export class SmartProxy {
 
         console.log(`GPP | Triggering Auto-Hydration for ${ids.length} actors...`);
 
-        // Notify User
-        ui.notifications.info(`GPP: Hydrating ${ids.length} Phantom Actors...`);
+        // Notify User if Verbose
+        if (game.settings.get("geanos-phantom-performance", "verboseNotifications")) {
+            ui.notifications.info(`GPP: Hydrating ${ids.length} Phantom Actors...`);
+        }
 
         for (const id of ids) {
             const actor = game.actors.get(id);

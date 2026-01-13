@@ -51,7 +51,9 @@ export class SceneIntegration {
 
         if (promises.length > 0) {
             console.log(`GPP | Pre-fetching ${promises.length} Phantoms...`);
-            ui.notifications.info(`GPP: Pre-fetching ${promises.length} actors for this scene...`);
+            if (game.settings.get("geanos-phantom-performance", "verboseNotifications")) {
+                ui.notifications.info(`GPP: Pre-fetching ${promises.length} actors for this scene...`);
+            }
             await Promise.all(promises);
         }
     }
