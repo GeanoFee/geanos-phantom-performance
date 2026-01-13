@@ -1,4 +1,4 @@
-# Geano's Phantom Performance (GPP)
+# Geano's Phantom Performance
 **"Ghosts in the Machine" - A High-Performance Memory Manager for Foundry VTT**
 
 ## Overview
@@ -55,6 +55,7 @@ Data integrity is paramount. GPP employs a **Read-Back Verification** protocol.
 ## 🔧 Technical Summary
 
 Geano's Phantom Performance operates by intercepting the FoundryVTT `Actor` class methods to inject its "Smart Proxy" layer. It utilizes a `flags` based system to track state (`isPhantom`, `backingId`) and relies on standard Foundry Document methods (`update`, `create`, `delete`) to ensure data integrity is maintained within the `world-phantom-storage` compendium.
+
 
 
 
