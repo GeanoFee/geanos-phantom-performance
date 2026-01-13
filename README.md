@@ -6,7 +6,7 @@ GPP solves the single greatest bottleneck in FoundryVTT: **Database Bloat**. It 
 ---
 
 ## 🚀 Why GPP?
-By default, Foundry VTT loads *every* piece of data in your world database upon startup. GPP breaks this limit:
+By default, FoundryVTT loads *every* piece of data in your world database upon startup. GPP breaks this limit:
 
 * **Blazing Fast Logins:** Experience up to **90% faster load times** for you and your players.
 * **Minimal RAM Footprint:** Inactive data no longer occupies precious system memory, preventing browser crashes on large campaigns.
@@ -51,6 +51,7 @@ if (gpp) {
 * **`GPP.isPhantom(doc)`:** Quick status check for any document.
 * **`GPP.prioritize(id)`:** Fire-and-forget background hydration (e.g., on hover or target selection).
 * **Hook `gpp.documentHydrated`:** React to documents as they become fully available.
+
 
 
 
