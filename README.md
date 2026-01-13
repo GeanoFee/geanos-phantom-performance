@@ -37,7 +37,7 @@ Maintain total control over your world’s resources:
 
 ---
 
-## 👨‍💻 For Developers (Middleware API)
+## 👨‍💻 For Developers (make your module "Phantom-ready" 👻)
 GPP is designed to be "Plug-and-Play." Other modules can interact safely with Phantoms using the built-in API:
 
 ```javascript
@@ -51,6 +51,7 @@ if (gpp) {
 * **`GPP.isPhantom(doc)`:** Quick status check for any document.
 * **`GPP.prioritize(id)`:** Fire-and-forget background hydration (e.g., on hover or target selection).
 * **Hook `gpp.documentHydrated`:** React to documents as they become fully available.
+
 
 
 
