@@ -35,7 +35,7 @@ Just like Actors, entire Scenes can be heavy. GPP can strip inactive Scenes of t
 - **RAM Savings:** Massive reduction in initial world load time, as thousands of walls/lights from unused maps are not loaded into memory.
 
 ### 📊 Tools & Utilities
-Foundry VTT is your domain, and GPP gives you the tools to manage it. Access these via `Module Settings`.
+FoundryVTT is your domain, and GPP gives you the tools to manage it. Access these via `Module Settings`.
 
 #### 1. GPP Dashboard
 A visual interface to monitor the efficiency of the system.
@@ -55,6 +55,7 @@ Data integrity is paramount. GPP employs a **Read-Back Verification** protocol.
 
 ## Technical Summary
 Geano's Phantom Performance operates by intercepting the Foundry VTT `Actor` class methods to inject its "Smart Proxy" layer. It utilizes a `flags` based system to track state (`isPhantom`, `backingId`) and relies on standard Foundry Document methods (`update`, `create`, `delete`) to ensure data integrity is maintained within the `world-phantom-storage` compendium.
+
 
 
 
