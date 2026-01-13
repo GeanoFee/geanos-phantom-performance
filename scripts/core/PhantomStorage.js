@@ -150,6 +150,7 @@ export class PhantomStorage {
         await actor.setFlag(PhantomStorage.FLAG_SCOPE, "isPhantom", false);
 
         console.log(`GPP | ${actor.name} returned to the living.`);
+        Hooks.callAll("gpp.documentHydrated", actor);
     }
 
     /**

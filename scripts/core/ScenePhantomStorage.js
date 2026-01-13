@@ -171,6 +171,7 @@ export class ScenePhantomStorage {
         // Release Flag
         await scene.setFlag(ScenePhantomStorage.FLAG_SCOPE, "isPhantom", false);
         console.log(`GPP | Scene ${scene.name} restored.`);
+        Hooks.callAll("gpp.documentHydrated", scene);
     }
 
     isPhantom(scene) {

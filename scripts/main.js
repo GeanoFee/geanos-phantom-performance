@@ -4,21 +4,19 @@
  */
 
 // Imports
-import { PhantomStorage } from "./core/PhantomStorage.js";
+import { GPP } from "./api/GPP.js";
 import { SmartProxy } from "./core/SmartProxy.js";
 import { HeatMap } from "./core/HeatMap.js";
 import { SceneIntegration } from "./core/SceneIntegration.js";
 // Phase 5 Imports
-import { ScenePhantomStorage } from "./core/ScenePhantomStorage.js";
 import { SceneProxy } from "./core/SceneProxy.js";
 import { SceneHeatMap } from "./core/SceneHeatMap.js";
 // Phase 6 Imports
-import { Exorcist } from "./lib/Exorcist.js";
-import { GPPDashboard } from "./ui/Dashboard.js";
 import { Settings } from "./core/Settings.js";
 
-// Global Instance
-export let GPP = null; // Used by other modules
+// Re-export GPP for other modules to import only if they desire strict typing, 
+// though window.GPP is the preferred method for loose coupling.
+export { GPP };
 
 Hooks.once("init", () => {
     console.log("Geano's Phantom Performance | Initializing...");
@@ -26,25 +24,11 @@ Hooks.once("init", () => {
     // Register Settings
     Settings.init();
 
-    // Core GPP Object
-    window.GPP = {
-        storage: new PhantomStorage(),
-        sceneStorage: new ScenePhantomStorage(),
+    // Initialize Core Systems (Instances)
+    GPP.init();
 
-        swapOut: async (actor) => window.GPP.storage.swapOut(actor),
-        swapIn: async (actor) => window.GPP.storage.swapIn(actor),
-
-        // Scene Shortcuts
-        swapOutScene: async (scene) => window.GPP.sceneStorage.swapOut(scene),
-        swapInScene: async (scene) => window.GPP.sceneStorage.swapIn(scene),
-
-        // Phase 6
-        exorcise: async () => Exorcist.performExorcism(),
-        dashboard: () => new GPPDashboard().render(true, { focus: true })
-    };
-
-    // Assign exported GPP (for internal module use if needed, basically alias to window.GPP)
-    GPP = window.GPP;
+    // Expose Global API (Immediately)
+    window.GPP = GPP;
 
     // Proxies
     SmartProxy.initialize();
@@ -54,9 +38,20 @@ Hooks.once("init", () => {
 Hooks.once("ready", async () => {
     console.log("Geano's Phantom Performance | Ready.");
 
-    // Initialize Compendiums
-    await window.GPP.storage.initialize();
-    await window.GPP.sceneStorage.initialize(); // NEW
+    // Connect to Database
+    await GPP.connect();
+
+    // Note: GPP.init() is called in init hook now to ensure window.GPP implies readiness (mostly),
+    // but the actual Compendium initialization is async.
+    // However, GPP.init() awaits it. But 'init' hook in Foundry does not await async callbacks before moving to ready?
+    // Actually, it's safer to rely on internal checks, but for now we moved init() to init hook.
+    // WAIT: Compendium creation might need 'ready' if packs aren't loaded? 
+    // Usually 'init' is too early for pack operations if they are world packs?
+    // Let's keep data usage in 'ready' to be safe, or check if existing logic worked.
+    // Previous Code had storage.initialize() in 'ready'. Let's revert that specific part or ensure GPP.init handles it safely.
+
+    // To be safe and consistent with previous behavior, let's keep expensive init in ready.
+    // But we want window.GPP to exist early.
 
     // Start Loops
     const heatMap = new HeatMap();

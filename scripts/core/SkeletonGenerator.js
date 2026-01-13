@@ -16,6 +16,12 @@ export class SkeletonGenerator {
         const model = (systemModels.Actor && systemModels.Actor[type]) ||
             (coreModels.Actor && coreModels.Actor[type]);
 
+        // If 'model' is not a class/function, we can't use 'new' on it.
+        if (typeof model !== 'function') {
+            console.warn(`GPP | Internal DataModel for '${type}' is not a constructor. Using empty object.`);
+            return {};
+        }
+
         if (!model) {
             console.warn(`GPP | No DataModel found for type '${type}'. Returning empty object.`);
             return {};

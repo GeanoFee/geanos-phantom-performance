@@ -11,7 +11,9 @@ export class SmartProxy {
     }
 
     static wrapActorPreparation() {
-        const ActorClass = game.actors.documentClass;
+        // Use CONFIG.Actor.documentClass because game.actors is not ready in 'init'
+        const ActorClass = CONFIG.Actor.documentClass;
+        // console.log("GPP | SmartProxy: Patching Actor.prepareData...");
 
         // 1. Wrap prepareEmbeddedDocuments to Proxy collections safely
         const originalPrepareEmbeddedDocuments = ActorClass.prototype.prepareEmbeddedDocuments;
@@ -33,6 +35,7 @@ export class SmartProxy {
 
             if (this.flags?.["geanos-phantom-performance"]?.isPhantom) {
                 // 'system' is usually writable, so Proxy is fine.
+                // console.log(`GPP | Attaching SmartProxy to ${this.name}`);
                 this.system = new Proxy(this.system, SmartProxy.createSystemHandler(this));
             }
         };
@@ -82,6 +85,10 @@ export class SmartProxy {
 
                 // If identifying logical properties, trigger hydration
                 // We debounce this to avoid 100 calls per frame
+
+                // DEBUG LOG
+                // console.log(`GPP | Property Access Detected: ${String(prop)} on ${actor.name}`);
+
                 SmartProxy.triggerHydration(actor);
 
                 return Reflect.get(target, prop, receiver);
