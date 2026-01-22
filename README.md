@@ -15,9 +15,9 @@ Geano's Phantom Performance (GPP) revolutionizes how Foundry VTT handles large-s
 
 GPP is engineered to meet the highest architectural standards for performance and data safety:
 
-*   **⚡ Zero-Latency Hydration:** Utilizing **Synchronous JIT-Decompression**, data is restored within the same CPU cycle. There are no more `await` calls when accessing Actors—Phantoms appear fully complete to the engine and other modules at all times.
+*   **⚡ Zero-Latency Hydration:** Utilizing **Synchronous JIT-Decompression**, data is restored within the same CPU cycle. Phantoms appear fully complete to the engine and other modules at all times.
 *   **👻 The "Ghost" Protocol:** GPP leaves **zero footprint** in your world database. All Phantom states are managed purely in volatile RAM via `WeakMaps`. If you disable the module, your world remains in its original, pristine state.
-*   **🛡️ TASS (Transient Atomic Safety Shield):** An atomic verification protocol ensures 100% data safety. A document is only "phantomized" after a synchronous read-back check mathematically confirms the integrity of the Shadow-Buffer data.
+*   **🛡️ TASS (Transient Atomic Safety Shield):** An atomic verification protocol ensures data safety. A document is only "phantomized" after a synchronous read-back check mathematically confirms the integrity of the Shadow-Buffer data.
 *   **🏎️ CPU Courtesy:** Background processes utilize `requestIdleCallback`, ensuring that optimizations only occur during genuine CPU idle time, never interfering with your game's frame rate.
 
 ## 🛠️ Core Technologies
@@ -54,4 +54,5 @@ if (GPP.isPhantom(doc)) {
 ## License
 
 This module is licensed under the MIT License.
+
 
