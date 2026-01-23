@@ -30,7 +30,7 @@ GPP is engineered to meet the highest architectural standards for performance an
 ## 📊 Dashboard & Tools
 
 *   **Real-Time Metrics:** The **GPP Dashboard** displays precisely how many megabytes of RAM you are saving through binary compression.
-*   **The Exorcism:** An emergency utility to immediately re-hydrate all Phantoms in RAM - perfect for manual backups or world maintenance.
+*   **The Exorcism:** An emergency utility to immediately re-hydrate all Phantoms in RAM - perfect for uninstallation or exporting data.
 *   **Self-Test Suite:** Developers can trigger automated regression tests via `GPP.diagnostics` directly from the console.
 *   **Debug Mode:** Enable strictly-typed logging for TASS verification cycles, hydration timings, and operational decay scans. Perfectly transparent for troubleshooting, silent when disabled.
 
@@ -55,3 +55,4 @@ if (GPP.isPhantom(doc)) {
 ---
 ## License
 This module is licensed under the [MIT License](LICENSE).
+
