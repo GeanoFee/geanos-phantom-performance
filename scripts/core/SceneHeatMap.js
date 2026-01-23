@@ -17,7 +17,7 @@ export class SceneHeatMap {
     }
 
     start() {
-        console.log("GPP | Starting Scene HeatMap...");
+        GPP.log("Starting Scene HeatMap...");
 
         // Hooks to update timestamp
         Hooks.on("canvasReady", (canvas) => {
@@ -49,7 +49,7 @@ export class SceneHeatMap {
     async processDecay() {
         if (!game.user.isGM) return;
 
-        console.log("GPP | Running Scene Decay Cycle...");
+        GPP.log("Running Scene Decay Cycle...");
         const now = Date.now();
         const scenes = game.scenes.contents;
 
@@ -68,7 +68,7 @@ export class SceneHeatMap {
             const timeSince = now - lastActive;
 
             if (timeSince > SceneHeatMap.IDLE_THRESHOLD_MS) {
-                console.log(`GPP | Scene ${scene.name} is cold (${Math.round(timeSince / 60000)} mins). Phantomizing...`);
+                GPP.log(`Scene ${scene.name} is cold (${Math.round(timeSince / 60000)} mins). Phantomizing...`);
                 await GPP.sceneStorage.swapOut(scene);
             }
         }

@@ -14,7 +14,9 @@ export class PhantomStorage {
      * Initialize the storage.
      */
     async initialize() {
-        console.log("GPP | Shadow Storage system ready.");
+        if (game.settings.get("geanos-phantom-performance", "debugMode")) {
+            console.log("GPP | Shadow Storage system ready.");
+        }
     }
 
     /**
@@ -28,16 +30,18 @@ export class PhantomStorage {
         const t0 = performance.now();
 
         // --- TASS START: Frozen Snapshot (Golden Record) ---
-        const goldenRecord = actor.toObject();
+        let goldenRecord = actor.toObject();
 
         // 1. Binary Handshake (Store)
         ShadowBuffer.store(actor);
 
         // 2. Atomic Verification
-        const storedData = ShadowBuffer.retrieve(actor);
+        const storedData = ShadowBuffer.retrieve(actor, "TASS Read-Back Validation");
 
         // 3. Compare (Strict Deep Equality)
-        const isExactMatch = foundry.utils.objectsEqual(goldenRecord, storedData);
+        // Normalize goldenRecord to JSON-primitive types to ensure fair comparison with stored data
+        const goldenRecordJson = JSON.parse(JSON.stringify(goldenRecord));
+        const isExactMatch = foundry.utils.objectsEqual(goldenRecordJson, storedData);
 
         // GC Optimization: Explicitly release the snapshot
         goldenRecord = null;
@@ -78,7 +82,7 @@ export class PhantomStorage {
         if (actor.sheet?.rendered) actor.render();
 
         const duration = performance.now() - t0;
-        if (duration > 10) {
+        if (duration > 10 && game.settings.get("geanos-phantom-performance", "debugMode")) {
             console.warn(`GPP | Slow TASS SwapOut for ${actor.name}: ${duration.toFixed(2)}ms`);
         }
         // console.log(`GPP | ${actor.name} is now a Phantom (Shadow-RAM).`);
@@ -124,7 +128,7 @@ export class PhantomStorage {
         if (actor.sheet?.rendered) actor.render();
 
         const duration = performance.now() - t0;
-        if (duration > 10) {
+        if (duration > 10 && game.settings.get("geanos-phantom-performance", "debugMode")) {
             console.warn(`GPP | Slow Hydration for ${actor.name}: ${duration.toFixed(2)}ms`);
         }
         // console.log(`GPP | ${actor.name} returned from Shadow.`);

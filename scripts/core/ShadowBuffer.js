@@ -35,7 +35,7 @@ export class ShadowBuffer {
      * @param {Actor} actor 
      * @returns {object|null} The full actor data
      */
-    static retrieve(actor) {
+    static retrieve(actor, label = "Decompressed") {
         if (!this._storage.has(actor.uuid)) return null;
 
         // Performance Tracking (The Shane Requirement)
@@ -48,14 +48,19 @@ export class ShadowBuffer {
 
             const duration = performance.now() - t0;
 
+            // Handle legacy 'silent=true' case just in case, though we will update callers immediately
+            if (label === true) return data;
+
             // 1. Debug Logging (if enabled)
-            import("../api/GPP.js").then(({ GPP }) => {
-                GPP.log(`Decompressed '${actor.name}' in ${duration.toFixed(3)}ms`);
-            });
+            // Use global game.settings directly to avoid circular dependency/async import
+            const debugMode = game.settings.get("geanos-phantom-performance", "debugMode");
+            if (debugMode) {
+                console.log(`%cGPP | Debug | ${label} '${actor.name}' in ${duration.toFixed(3)}ms`, 'color: #00ffcc; font-weight: bold;');
+            }
 
             // 2. Threshold Warning (Always ON)
             if (duration > 10) {
-                console.warn(`GPP | Performance Warning: Decompression for ${actor.name} took ${duration.toFixed(2)}ms`);
+                console.warn(`GPP | Performance Warning: ${label} for ${actor.name} took ${duration.toFixed(2)}ms`);
             }
 
             return data;
@@ -64,6 +69,7 @@ export class ShadowBuffer {
             return null;
         }
     }
+
 
     /**
      * Checks if we hold data for this actor.

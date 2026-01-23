@@ -4,7 +4,46 @@ export class HeatMap {
     static IDLE_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes
     static CHECK_INTERVAL_MS = 5 * 60 * 1000;  // Check every 5 minutes
 
-    // ...
+    constructor() {
+        this.runLoop = null;
+    }
+
+    start() {
+        GPP.log("Initializing Heat Map...");
+
+        // 1. Hooks for Activity
+        Hooks.on("controlToken", (token, controlled) => {
+            if (controlled && token.actor) this.touch(token.actor);
+        });
+
+        Hooks.on("updateActor", (actor) => {
+            this.touch(actor);
+        });
+
+        Hooks.on("updateItem", (item) => {
+            if (item.parent) this.touch(item.parent);
+        });
+
+        // 3. Track Hydration as Interaction
+        Hooks.on("gpp.documentHydrated", (actor) => {
+            this.touch(actor);
+        });
+
+        // 2. Start Decay Loop (CPU Courtesy: Idle Callback)
+        this.scheduleDecay();
+    }
+
+    scheduleDecay() {
+        // Wait for usage interval, THEN wait for CPU idle to actually process
+        this.runLoop = setTimeout(() => {
+            requestIdleCallback(() => {
+                this.processDecay().finally(() => {
+                    // Reschedule only after completion
+                    this.scheduleDecay();
+                });
+            }, { timeout: 2000 }); // Optional timeout to force run if never idle? No, let's keep it polite.
+        }, HeatMap.CHECK_INTERVAL_MS);
+    }
 
     /**
      * Mark an actor as active.

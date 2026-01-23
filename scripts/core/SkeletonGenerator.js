@@ -18,7 +18,7 @@ export class SkeletonGenerator {
 
         // If 'model' is not a class/function, we can't use 'new' on it.
         if (typeof model !== 'function') {
-            console.warn(`GPP | Internal DataModel for '${type}' is not a constructor. Using empty object.`);
+            // console.warn(`GPP | Internal DataModel for '${type}' is not a constructor. Using empty object.`);
             return {};
         }
 

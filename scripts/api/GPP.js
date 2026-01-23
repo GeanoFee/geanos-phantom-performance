@@ -149,6 +149,49 @@ export class GPP {
         return Exorcist.performExorcism();
     }
 
+    /**
+     * Aggressively phantomizes all eligible entities in the world.
+     * Useful for seeing maximum potential memory savings.
+     */
+    static async phantomizeAll() {
+        if (!game.user.isGM) return;
+
+        ui.notifications.info("GPP: Starting Aggressive Optimization...");
+        this.log("Starting 'Phantomize Everything'...");
+
+        let actorCount = 0;
+        let sceneCount = 0;
+
+        // 1. Actors
+        const actors = game.actors.contents;
+        for (const actor of actors) {
+            // Safety Checks
+            if (this.isPhantom(actor)) continue;
+            if (actor.hasPlayerOwner) continue; // Skip PC actors for safety
+
+            this.storage.swapOutSync(actor);
+            if (this.isPhantom(actor)) actorCount++;
+        }
+
+        // 2. Scenes
+        const scenes = game.scenes.contents;
+        for (const scene of scenes) {
+            // Safety Checks
+            if (this.isPhantom(scene)) continue;
+            if (scene.active || scene.isView) continue; // functionality break if active
+
+            this.sceneStorage.swapOutSync(scene);
+            if (this.isPhantom(scene)) sceneCount++;
+        }
+
+        const msg = `GPP: Optimization Complete. Phantomized ${actorCount} Actors and ${sceneCount} Scenes.`;
+        this.log(msg);
+        ui.notifications.info(msg);
+
+        // Open Dashboard to show results
+        this.dashboard();
+    }
+
     static dashboard() {
         return new GPPDashboard().render(true, { focus: true });
     }

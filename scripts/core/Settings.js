@@ -54,6 +54,29 @@ export class Settings {
             restricted: true
         });
 
+        // 3. Maximize (Phantomize All)
+        class MaximizeWrapper extends FormApplication {
+            render() {
+                // Confirm dialog
+                Dialog.confirm({
+                    title: "Maximize Performance?",
+                    content: "<p>This will attempt to phantomize <strong>ALL</strong> eligible Actors and Scenes in your world (excluding safe targets like active scenes or player characters).</p><p>This allows you to see the maximum RAM savings potential on the dashboard.</p>",
+                    yes: () => GPP.phantomizeAll(),
+                    defaultYes: true
+                });
+                return;
+            }
+        }
+
+        game.settings.registerMenu(MODULE_ID, "gppMaximize", {
+            name: "Maximize Performance",
+            label: "Phantomize Everything",
+            hint: "Aggressively phantomizes all eligible entities to free up maximum RAM.",
+            icon: "fas fa-compress-arrows-alt",
+            type: MaximizeWrapper,
+            restricted: true
+        });
+
         console.log("GPP | Settings Registered.");
     }
 }

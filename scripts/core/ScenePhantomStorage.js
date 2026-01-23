@@ -13,7 +13,9 @@ export class ScenePhantomStorage {
      * Initialize the storage.
      */
     async initialize() {
-        console.log("GPP | Scene Shadow Storage ready.");
+        if (game.settings.get("geanos-phantom-performance", "debugMode")) {
+            console.log("GPP | Scene Shadow Storage ready.");
+        }
     }
 
     /**
@@ -27,21 +29,25 @@ export class ScenePhantomStorage {
 
         // Don't phantomize the currently active scene!
         if (scene.active || scene.isView) {
-            console.warn("GPP | Cannot Phantomize an active or viewed Scene:", scene.name);
+            if (game.settings.get("geanos-phantom-performance", "debugMode")) {
+                console.warn("GPP | Cannot Phantomize an active or viewed Scene:", scene.name);
+            }
             return;
         }
 
         // --- TASS START: Frozen Snapshot ---
-        const goldenRecord = scene.toObject();
+        let goldenRecord = scene.toObject();
 
         // 1. Binary Handshake (Store)
         ShadowBuffer.store(scene);
 
         // 2. Atomic Verification
-        const storedData = ShadowBuffer.retrieve(scene);
+        const storedData = ShadowBuffer.retrieve(scene, "TASS Read-Back Validation");
 
         // 3. Compare
-        const isExactMatch = foundry.utils.objectsEqual(goldenRecord, storedData);
+        // Normalize goldenRecord to JSON-primitive types to ensure fair comparison with stored data
+        const goldenRecordJson = JSON.parse(JSON.stringify(goldenRecord));
+        const isExactMatch = foundry.utils.objectsEqual(goldenRecordJson, storedData);
 
         // GC Optimization: Explicitly release the snapshot
         goldenRecord = null;
@@ -71,7 +77,7 @@ export class ScenePhantomStorage {
         source.notes = [];
 
         const duration = performance.now() - t0;
-        if (duration > 10) {
+        if (duration > 10 && game.settings.get("geanos-phantom-performance", "debugMode")) {
             console.warn(`GPP | Slow TASS SwapOut for Scene ${scene.name}: ${duration.toFixed(2)}ms`);
         }
         // console.log(`GPP | Scene ${scene.name} is now a Phantom.`);
@@ -105,7 +111,7 @@ export class ScenePhantomStorage {
 
         // 4. Notify
         const duration = performance.now() - t0;
-        if (duration > 10) {
+        if (duration > 10 && game.settings.get("geanos-phantom-performance", "debugMode")) {
             console.warn(`GPP | Slow Hydration for Scene ${scene.name}: ${duration.toFixed(2)}ms`);
         }
         // console.log(`GPP | Scene ${scene.name} restored from Shadow.`);
