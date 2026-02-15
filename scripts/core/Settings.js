@@ -36,12 +36,23 @@ export class Settings {
         });
 
         // 2. Exorcism Menu (Wrapper)
-        class ExorcismWrapper extends FormApplication {
-            render() {
+        const { ApplicationV2 } = foundry.applications.api;
+
+        class ExorcismWrapper extends ApplicationV2 {
+            static DEFAULT_OPTIONS = {
+                id: "gpp-exorcism-wrapper",
+                window: { title: "Exorcism Wrapper" }
+            };
+
+            async _renderHTML(context, options) {
                 // Directly call the logic, relying on the Dialog it creates
                 Exorcist.performExorcism();
-                // We don't really need to render a form for this simple trigger
-                return;
+                return ""; // Return empty string as we don't need UI
+            }
+
+            // Override render to ensure we catch the call
+            async render(options) {
+                return this._renderHTML({}, options);
             }
         }
 
@@ -55,16 +66,31 @@ export class Settings {
         });
 
         // 3. Maximize (Phantomize All)
-        class MaximizeWrapper extends FormApplication {
-            render() {
+        class MaximizeWrapper extends ApplicationV2 {
+            static DEFAULT_OPTIONS = {
+                id: "gpp-maximize-wrapper",
+                window: { title: "Maximize Wrapper" }
+            };
+
+            async _renderHTML(context, options) {
                 // Confirm dialog
-                Dialog.confirm({
-                    title: "Maximize Performance?",
+                await foundry.applications.api.DialogV2.confirm({
+                    window: { title: "Maximize Performance?" },
                     content: "<p>This will attempt to phantomize <strong>ALL</strong> eligible Actors and Scenes in your world (excluding safe targets like active scenes or player characters).</p><p>This allows you to see the maximum RAM savings potential on the dashboard.</p>",
-                    yes: () => GPP.phantomizeAll(),
-                    defaultYes: true
+                    yes: {
+                        callback: () => GPP.phantomizeAll(),
+                        label: "Yes"
+                    },
+                    no: {
+                        label: "No"
+                    },
+                    modal: true
                 });
-                return;
+                return "";
+            }
+
+            async render(options) {
+                return this._renderHTML({}, options);
             }
         }
 

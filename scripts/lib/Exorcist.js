@@ -10,16 +10,22 @@ export class Exorcist {
     static async performExorcism() {
         console.warn("GPP | ✝️ STARTING EXORCISM ✝️");
 
-        const confirm = await Dialog.confirm({
-            title: "GPP: The Exorcism",
+        const confirm = await foundry.applications.api.DialogV2.confirm({
+            window: { title: "GPP: The Exorcism" },
             content: `
             <p><strong>Warning:</strong> This will attempt to hydrate (restore) ALL Phantom Actors and ALL Phantom Scenes.</p>
             <p>This process might take a while and will significantly increase RAM usage.</p>
             <p>Are you sure you want to remove all Phantoms?</p>
             `,
-            yes: () => true,
-            no: () => false,
-            defaultYes: false
+            yes: {
+                callback: () => true,
+                label: "Yes"
+            },
+            no: {
+                callback: () => false,
+                label: "No"
+            },
+            modal: true
         });
 
         if (!confirm) return;
