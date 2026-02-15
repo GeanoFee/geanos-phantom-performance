@@ -19,7 +19,6 @@
   "packs": [],
   "flags": {},
   "url": "https://github.com/GeanoFee/geanos-phantom-performance",
-  "manifest": "https://github.com/GeanoFee/geanos-phantom-performance/releases/download/v2.0.0/module.json",
-  "download": "https://github.com/GeanoFee/geanos-phantom-performance/releases/download/v2.0.0/module.zip"
+  "manifest": "https://github.com/GeanoFee/geanos-phantom-performance/releases/download/3.0.0/module.json",
+  "download": "https://github.com/GeanoFee/geanos-phantom-performance/releases/download/3.0.0/module.zip"
 }
-
